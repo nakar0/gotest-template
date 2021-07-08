@@ -36,7 +36,7 @@ func {{.TestName}}(t *testing.T) {
 			{{Want .}} {{.Type}}
 		{{- end}}
 		{{- if .ReturnsError}}
-			wantErr bool
+			wantIsErr bool
 		{{- end}}
 	}{
 		// TODO: Add test cases.
@@ -58,11 +58,12 @@ func {{.TestName}}(t *testing.T) {
 				{{- end}}
 			{{- end}}
 			{{- if and (not .OnlyReturnsError) (not .OnlyReturnsOneValue) }}
+				t.Parallel()
 				{{template "results" $f}} {{template "call" $f}}
 			{{- end}}
 			{{- if .ReturnsError}}
-				if {{if .OnlyReturnsError}} err := {{template "call" $f}}; {{end}} (err != nil) != tt.wantErr {
-					t.Errorf("{{template "message" $f}} error = %v, wantErr %v", {{template "inputs" $f}} err, tt.wantErr)
+				if {{if .OnlyReturnsError}} err := {{template "call" $f}}; {{end}} (err != nil) != tt.wantIsErr {
+					t.Errorf("{{template "message" $f}} error = %v, wantIsErr %v", {{template "inputs" $f}} err, tt.wantIsErr)
 					{{- if .TestResults}}
 						{{if .Subtests }}return{{else}}continue{{end}}
 					{{- end}}

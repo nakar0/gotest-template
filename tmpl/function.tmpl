@@ -43,7 +43,7 @@ func {{.TestName}}(t *testing.T) {
 	}
 	for {{if (or .Subtests (not .IsNaked))}} _, tt := {{end}} range tests {
 		tt := tt
-        {{- if .Subtests }}t.Run(tt.name, func(t *testing.T) { {{- end -}}
+        {{if .Subtests }}t.Run(tt.name, func(t *testing.T) { {{- end -}}
 			t.Parallel()
 
 			{{- with .Receiver}}

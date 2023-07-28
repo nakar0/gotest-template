@@ -73,15 +73,8 @@ func {{.TestName}}(t *testing.T) {
 			{{- end}}
 			{{- range .TestResults}}
 				{{- if .IsWriter}}
-					if {{Got .}} := {{Param .}}.String(); {{Got .}} != tt.{{Want .}} {
-						t.Errorf("{{template "message" $f}} {{if $f.ReturnsMultiple}}{{Got .}} {{end}}= %v, want %v{{ if (not ( or .IsWriter .IsBasicType))}}\ndiff=%v{{ end }}", {{template "inputs" $f}} {{Got .}}, tt.{{Want .}}
-							{{- if (not ( or .IsWriter .IsBasicType))}}, cmp.Diff({{Got .}}, tt.{{Want .}}){{ end }})
-					}
-				{{- else if .IsBasicType}}
-					if {{if $f.OnlyReturnsOneValue}}{{Got .}} := {{template "inline" $f}}; {{end}} {{Got .}} != tt.{{Want .}} {
-						t.Errorf("{{template "message" $f}} {{if $f.ReturnsMultiple}}{{Got .}} {{end}}= %v, want %v{{ if (not ( or .IsWriter .IsBasicType))}}\ndiff=%v{{ end }}", {{template "inputs" $f}} {{Got .}}, tt.{{Want .}}
-							{{- if (not ( or .IsWriter .IsBasicType))}}, cmp.Diff({{Got .}}, tt.{{Want .}}){{ end }})
-					}
+					{{Got .}} := {{Param .}}.String()
+					assert.Equal(t, {{Got .}}, tt.{{Want .}})
 				{{- else}}
 					{{if $f.OnlyReturnsOneValue}}{{Got .}} := {{template "inline" $f}} {{end}}
 					assert.Equal(t, {{Got .}}, tt.{{Want .}})

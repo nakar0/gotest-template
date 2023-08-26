@@ -74,10 +74,10 @@ func {{.TestName}}(t *testing.T) {
 			{{- range .TestResults}}
 				{{- if .IsWriter}}
 					{{Got .}} := {{Param .}}.String()
-					assert.Equal(t, {{Got .}}, tt.{{Want .}})
+					assert.Exactly(t, tt.{{Want .}}, {{Got .}})
 				{{- else}}
 					{{if $f.OnlyReturnsOneValue}}{{Got .}} := {{template "inline" $f}} {{end}}
-					assert.Equal(t, {{Got .}}, tt.{{Want .}})
+					assert.Exactly(t, tt.{{Want .}}, {{Got .}})
 				{{- end}}
 			{{- end}}
 		{{- if .Subtests }} }) {{- end -}}
